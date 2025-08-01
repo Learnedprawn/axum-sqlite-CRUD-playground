@@ -19,7 +19,7 @@
 # 🦀 rustqlite
 
 A journey to build a **SQLite-inspired database from scratch in Rust**, with a modern **Axum-based API layer**.  
-This project is purely for **learning**, exploration, and fun (and maybe a sprinkle of masochism 🧠💥).
+This project is purely for **learning**, exploration, and fun.
 
 ---
 
@@ -45,7 +45,6 @@ This project is purely for **learning**, exploration, and fun (and maybe a sprin
 - A working REST API to query a custom DB engine.
 - Implement minimal SQL-like operations (CRUD).
 - Learn about memory management, disk I/O, and indexing.
-- Appreciate why people don’t casually build databases 😅
 
 ---
 
