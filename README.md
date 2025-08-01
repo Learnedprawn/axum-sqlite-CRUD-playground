@@ -34,8 +34,8 @@ This project is purely for **learning**, exploration, and fun.
 4. 🤯 **Paused Axum** exploration after realizing I needed a better async foundation. Switching gears to understand **Tokio** first.
 
 5. 🎥 **Watching Jon Gjengset's excellent videos** to get hands-on understanding:
-   - [Axum Deep Dive](https://www.youtube.com/watch?v=Wnb_n5YktO8)
-   - [Tokio Crash Course](https://www.youtube.com/watch?v=o2ob8zkeq2s)
+   - [Tokio Video](https://www.youtube.com/watch?v=o2ob8zkeq2s)
+   - [Axum Video](https://www.youtube.com/watch?v=Wnb_n5YktO8)
 
 6. 🛠️ **Plan**: Finish these videos, build the Axum API layer first, then dive deep into **writing the database engine** from scratch.
 
