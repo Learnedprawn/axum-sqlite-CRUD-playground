@@ -16,7 +16,7 @@
 <!--     Tokio Video: https://www.youtube.com/watch?v=o2ob8zkeq2s -->
 <!---->
 <!-- 6) First will complete these videos and try to build the API to the database before starting the actual database. -->
-# 🦀 rustqlite
+# 🦀 Rustqlite
 
 A journey to build a **SQLite-inspired database from scratch in Rust**, with a modern **Axum-based API layer**.  
 This project is purely for **learning**, exploration, and fun.
