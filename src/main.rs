@@ -22,7 +22,10 @@ async fn main() -> anyhow::Result<()> {
 
     let state = AppState { pool };
 
-    let app = Router::new().route("/", get(root)).with_state(state);
+    let app = Router::new()
+        .route("/", get(root))
+        // .route("/table", get(create_table))
+        .with_state(state);
     // .route("/create", post(create_table("test".to_string(), &pool)));
     // create_table(&pool, String::from_str("test"))
     let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await.unwrap();
