@@ -1,24 +1,48 @@
+use std::str::FromStr;
+use std::sync::Arc;
+
+use anyhow::Ok;
+use axum::extract::State;
+use axum::routing::post;
 use axum::{Json, Router, http::StatusCode, response::IntoResponse, routing::get};
 use serde_json::{Value, json};
+use sqlx::sqlite::SqliteConnectOptions;
+use sqlx::{ConnectOptions, SqlitePool};
 
+#[derive(Clone)]
+struct AppState {
+    pool: SqlitePool,
+}
 #[tokio::main]
-async fn main() {
-    let app = Router::new()
-        .route("/", get(root))
-        .route("/foo", get(get_json));
+// use std::error::Error;
+// async fn main() -> Result<(), Box<dyn std::error::Error>> {
+async fn main() -> anyhow::Result<()> {
+    let opts = SqliteConnectOptions::from_str("sqlite::memory:")?;
+    let pool = SqlitePool::connect_with(opts).await?;
 
+    let state = AppState { pool };
+
+    let app = Router::new().route("/", get(root)).with_state(state);
+    // .route("/create", post(create_table("test".to_string(), &pool)));
+    // create_table(&pool, String::from_str("test"))
     let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await.unwrap();
     let app = app.fallback(handler_404);
     axum::serve(listener, app).await.unwrap();
     println!("hello");
+    Ok(())
 }
 
+// fn init_router(state: Arc<AppState>) -> Router {
+//     Router::new().route("/", get(root)).with_state(state)
+// }
 async fn root() -> &'static str {
     "Hello World Vinesh"
 }
-async fn get_json() -> Json<Value> {
-    Json(json!({"data": 42}))
+
+async fn create_table(State(state): State<Arc<AppState>>) -> anyhow::Result<()> {
+    Ok(())
 }
+
 async fn handler_404() -> impl IntoResponse {
     (StatusCode::NOT_FOUND, "Lol this was so easy?")
 }
