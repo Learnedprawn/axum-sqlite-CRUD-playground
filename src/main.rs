@@ -5,6 +5,7 @@ use anyhow::Ok;
 use axum::extract::State;
 use axum::routing::post;
 use axum::{Json, Router, http::StatusCode, response::IntoResponse, routing::get};
+
 use serde_json::{Value, json};
 use sqlx::sqlite::SqliteConnectOptions;
 use sqlx::{ConnectOptions, SqlitePool};
@@ -20,11 +21,11 @@ async fn main() -> anyhow::Result<()> {
     let opts = SqliteConnectOptions::from_str("sqlite::memory:")?;
     let pool = SqlitePool::connect_with(opts).await?;
 
-    let state = AppState { pool };
+    let state = Arc::new(AppState { pool });
 
     let app = Router::new()
         .route("/", get(root))
-        // .route("/table", get(create_table))
+        .route("/table", get(create_table))
         .with_state(state);
     // .route("/create", post(create_table("test".to_string(), &pool)));
     // create_table(&pool, String::from_str("test"))
@@ -42,9 +43,8 @@ async fn root() -> &'static str {
     "Hello World Vinesh"
 }
 
-async fn create_table(State(state): State<Arc<AppState>>) -> anyhow::Result<()> {
-    Ok(())
-}
+#[axum::debug_handler]
+async fn create_table(State(state): State<Arc<AppState>>) -> impl IntoResponse {}
 
 async fn handler_404() -> impl IntoResponse {
     (StatusCode::NOT_FOUND, "Lol this was so easy?")
