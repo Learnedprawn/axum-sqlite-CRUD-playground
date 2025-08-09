@@ -27,6 +27,16 @@ enum ApiResponse {
     JsonData(Vec<Message>),
 }
 
+impl IntoResponse for ApiResponse {
+    fn into_response(self) -> axum::response::Response {
+        match self {
+            Self::Ok => (StatusCode::OK).into_response(),
+            Self::Created => (StatusCode::CREATED).into_response(),
+            Self::JsonData(data) => (StatusCode::OK, Json(data)).into_response(),
+        }
+    }
+}
+
 #[tokio::main]
 // use std::error::Error;
 // async fn main() -> Result<(), Box<dyn std::error::Error>> {
