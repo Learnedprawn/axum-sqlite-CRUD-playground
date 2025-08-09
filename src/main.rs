@@ -6,6 +6,7 @@ use axum::extract::State;
 use axum::routing::post;
 use axum::{Json, Router, http::StatusCode, response::IntoResponse, routing::get};
 
+use serde::Serialize;
 use serde_json::{Value, json};
 use sqlx::sqlite::SqliteConnectOptions;
 use sqlx::{ConnectOptions, SqlitePool};
@@ -14,6 +15,18 @@ use sqlx::{ConnectOptions, SqlitePool};
 struct AppState {
     pool: SqlitePool,
 }
+
+#[derive(Serialize)]
+struct Message {
+    message: String,
+}
+
+enum ApiResponse {
+    Ok,
+    Created,
+    JsonData(Vec<Message>),
+}
+
 #[tokio::main]
 // use std::error::Error;
 // async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -44,7 +57,10 @@ async fn root() -> &'static str {
 }
 
 #[axum::debug_handler]
-async fn create_table(State(state): State<Arc<AppState>>) -> impl IntoResponse {}
+async fn create_table(State(state): State<Arc<AppState>>) -> impl IntoResponse {
+    let pool = &state.pool;
+    let connection = pool.acquire().await.unwrap();
+}
 
 async fn handler_404() -> impl IntoResponse {
     (StatusCode::NOT_FOUND, "Lol this was so easy?")
