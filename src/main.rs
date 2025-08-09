@@ -37,6 +37,27 @@ impl IntoResponse for ApiResponse {
     }
 }
 
+enum ApiError {
+    BadRequest,
+    Forbidden,
+    Unauthorised,
+    InternalServerError,
+}
+
+impl IntoResponse for ApiError {
+    fn into_response(self) -> axum::response::Response {
+        // match self {
+        //     self::Inter => ().into_response(),
+        // }
+        match self {
+            ApiError::BadRequest => (StatusCode::BAD_REQUEST).into_response(),
+            ApiError::Forbidden => (StatusCode::FORBIDDEN).into_response(),
+            ApiError::Unauthorised => (StatusCode::UNAUTHORIZED).into_response(),
+            ApiError::InternalServerError => (StatusCode::INTERNAL_SERVER_ERROR).into_response(),
+        }
+    }
+}
+
 #[tokio::main]
 // use std::error::Error;
 // async fn main() -> Result<(), Box<dyn std::error::Error>> {
