@@ -1,11 +1,13 @@
+use std::ops::Sub;
 use std::str::FromStr;
 use std::sync::Arc;
 
-use anyhow::Ok;
+// use anyhow::Ok;
 use axum::extract::State;
 use axum::routing::post;
 use axum::{Json, Router, http::StatusCode, response::IntoResponse, routing::get};
 
+use serde::Deserialize;
 use serde::Serialize;
 use serde_json::{Value, json};
 use sqlx::sqlite::SqliteConnectOptions;
@@ -18,6 +20,11 @@ struct AppState {
 
 #[derive(Serialize)]
 struct Message {
+    message: String,
+}
+
+#[derive(Deserialize)]
+pub struct Submission {
     message: String,
 }
 
@@ -88,9 +95,15 @@ async fn root() -> &'static str {
 }
 
 #[axum::debug_handler]
-async fn create_table(State(state): State<Arc<AppState>>) -> impl IntoResponse {
+async fn create_table(State(state): State<Arc<AppState>>) -> Result<ApiResponse, ApiError> {
     let pool = &state.pool;
     let connection = pool.acquire().await.unwrap();
+    Ok(ApiResponse::Ok)
+}
+
+async fn json_handler(Json(json): Json<Submission>) -> Result<ApiResponse, ApiError> {
+    println!("{}", json.message);
+    Ok(ApiResponse::Ok)
 }
 
 async fn handler_404() -> impl IntoResponse {
