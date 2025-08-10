@@ -76,7 +76,7 @@ Tokio is Rust’s asynchronous runtime that supercharges concurrency and perform
   Many Tokio APIs intentionally resemble Rust’s standard library (like `std::thread`, `std::Mutex`, etc.), making async easier to adopt.
 
 * **Async Utilities**
-  Tokio provides async versions of essential tools:
+  Tokio provides async versions of essentiall tools:
 
   * `tokio::io` – non-blocking file and network IO
   * `tokio::sync::Mutex`, `RwLock` – async-safe synchronization
