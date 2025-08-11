@@ -9,7 +9,7 @@ use axum::{Json, Router, http::StatusCode, response::IntoResponse, routing::get}
 
 use serde::Deserialize;
 use serde::Serialize;
-use serde_json::{Value, json};
+use serde_json::{ json};
 use sqlx::sqlite::SqliteConnectOptions;
 use sqlx::{ConnectOptions, SqlitePool};
 
