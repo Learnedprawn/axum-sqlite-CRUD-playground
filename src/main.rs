@@ -4,12 +4,12 @@ use std::sync::Arc;
 
 // use anyhow::Ok;
 use axum::extract::State;
-use axum::routing::post;
+use axum::routing::{patch, post};
 use axum::{Json, Router, http::StatusCode, response::IntoResponse, routing::get};
 
 use serde::Deserialize;
 use serde::Serialize;
-use serde_json::{ json};
+use serde_json::json;
 use sqlx::sqlite::SqliteConnectOptions;
 use sqlx::{ConnectOptions, SqlitePool};
 
@@ -76,6 +76,8 @@ async fn main() -> anyhow::Result<()> {
 
     let app = Router::new()
         .route("/", get(root))
+        .route("/tasks", get(get_tasks).post(create_tasks))
+        .route("/tasks/{task_id}", patch(update_tasks).delete(delete_tasks))
         .route("/table", get(create_table))
         .with_state(state);
     // .route("/create", post(create_table("test".to_string(), &pool)));
@@ -93,6 +95,11 @@ async fn main() -> anyhow::Result<()> {
 async fn root() -> &'static str {
     "Hello World Vinesh"
 }
+
+async fn get_tasks() {}
+async fn create_tasks() {}
+async fn update_tasks() {}
+async fn delete_tasks() {}
 
 #[axum::debug_handler]
 async fn create_table(State(state): State<Arc<AppState>>) -> Result<ApiResponse, ApiError> {
