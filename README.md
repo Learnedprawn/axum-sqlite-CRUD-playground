@@ -1,6 +1,4 @@
 
----
-
 # axum-sqlite-CRUD-playground
 
 A minimal **CRUD API** built with [Axum](https://github.com/tokio-rs/axum) and [SQLite](https://www.sqlite.org/). Using [rusqlite](https://github.com/rusqlite/rusqlite)
@@ -31,7 +29,5 @@ This project is meant as a learning playground for experimenting with:
    ```bash
    cargo run
    ```
-
----
 
 
