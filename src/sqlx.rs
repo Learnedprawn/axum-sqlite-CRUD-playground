@@ -69,17 +69,17 @@ impl IntoResponse for ApiError {
 // use std::error::Error;
 // async fn main() -> Result<(), Box<dyn std::error::Error>> {
 async fn main() -> anyhow::Result<()> {
-    // let opts = SqliteConnectOptions::from_str("sqlite::memory:")?;
-    // let pool = SqlitePool::connect_with(opts).await?;
+    let opts = SqliteConnectOptions::from_str("sqlite::memory:")?;
+    let pool = SqlitePool::connect_with(opts).await?;
 
-    // let state = Arc::new(AppState { pool });
+    let state = Arc::new(AppState { pool });
 
     let app = Router::new()
         .route("/", get(root))
         .route("/tasks", get(get_tasks).post(create_tasks))
         .route("/tasks/{task_id}", patch(update_tasks).delete(delete_tasks))
-        .route("/table", get(create_table));
-    // .with_state(state);
+        .route("/table", get(create_table))
+        .with_state(state);
     // .route("/create", post(create_table("test".to_string(), &pool)));
     // create_table(&pool, String::from_str("test"))
     let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await.unwrap();
@@ -104,6 +104,15 @@ struct TaskRow {
 }
 
 async fn get_tasks(State(state): State<Arc<AppState>>) -> Result<ApiResponse, ApiError> {
+    sqlx::query_as!(TaskRow, "Select * From task")
+        .fetch_all(&state.pool)
+        .await
+        .map_err(|e| {
+            (
+                StatusCode::INTERNAL_SERVER_ERROR,
+                json!({"success": false, "message": e}),
+            )
+        });
     Ok(ApiResponse::Ok)
 }
 async fn create_tasks(State(state): State<Arc<AppState>>) -> Result<ApiResponse, ApiError> {

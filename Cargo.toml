@@ -11,3 +11,4 @@ sqlx = { version = "0.8", features = [ "runtime-tokio","tls-native-tls", "sqlite
 anyhow = "1.0.98"
 serde = "1.0.219"
 dotenvy = "0.15.7"
+sqlx-cli = "0.8.6"
